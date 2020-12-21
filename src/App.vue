@@ -1,6 +1,6 @@
 <template>
-  <div class="container mt-5 display word-wrapped">
-    <h1>Kanban Board 2020</h1>
+  <div class="container mt-5 display word-wrapped" v-bind:class="{'dark':darkTheme, 'white': !darkTheme}">
+    <h1>KANBAN BOARD 2020 FREE</h1>
     <div class="row">
       <div class="col form-inline">
         <b-form-input
@@ -11,6 +11,7 @@
           @keyup.enter="add"
         ></b-form-input>
         <b-button @click="add" variant="primary" class="ml-3">Add</b-button>
+        <b-button class="theme-changer" @click="darkTheme = !darkTheme; changeBodyColor()">Theme</b-button>
       </div>
     </div>
     <div class="row mt-5">
@@ -42,7 +43,7 @@
       </div>
 
       <div class="col-4">
-        <div class="p-2 alert alert-primary">
+        <div class="p-2 alert" v-bind:class="{'alert-primary': !darkTheme, 'alert-warning': darkTheme}">
           <h3>In Progress</h3>
           <draggable 
             class="list-group kanban-column"
@@ -71,7 +72,7 @@
       </div>
 
       <div class="col-4">
-        <div class="p-2 alert alert-success">
+        <div class="p-2 alert" v-bind:class="{'alert-success': !darkTheme, 'alert-danger': darkTheme}">
           <h3>Done</h3>
           <draggable
             class="list-group kanban-column"
@@ -160,6 +161,8 @@ export default {
 
     let itemsLog = JSON.parse(localStorage.getItem('itemsLog'));
     this.selectedItem = null;
+    this.darkTheme = false;
+    document.body.style.backgroundColor = 'white';
     if (itemsLog){
         this.toDo = itemsLog[0];
         this.inProgress = itemsLog[1];
@@ -182,7 +185,8 @@ export default {
         modalStartTime: "",
         modalEndDate: "",
         modalEndTime: "",
-        selectedItem: this.selectedItem
+        selectedItem: this.selectedItem,
+        darkTheme: false
     }
   },
   filters: {
@@ -214,6 +218,12 @@ export default {
       ].join(':')}
   },
   methods: {
+    changeBodyColor: function() {
+      if (document.body.style.backgroundColor == 'white') 
+        document.body.style.backgroundColor = 'rgb(30, 30, 30)';
+      else 
+        document.body.style.backgroundColor = 'white';
+    },
     datetimeGetter: d => {
       d = new Date(d);
       return [
@@ -304,4 +314,13 @@ export default {
 .btn-sm + .btn-sm {
   margin-left: 10px;
 }
+.dark {
+  background-color: rgb(30, 30, 30);
+  color: white;
+}
+.white {
+  background-color: white;
+  color: black;
+}
+
 </style>
